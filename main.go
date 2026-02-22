@@ -14,7 +14,19 @@ func main() {
 	// input := os.Args[1]
 	// fmt.Println("Input received:", input)
 	// Parse(input)
-	Parse(`{"name":69.60.}`)
+
+	// Parse(`{
+	// 	"name": 6990809.90
+	// }`)
+	Parse(`{
+		"name": "Michael Smith",
+		"age" : 50,
+		"Net worth" : 6990809.90,
+		"isAlive" : true,
+		"hobbies" : null,
+		"isLoggedIn" : false
+	}`)
+
 }
 
 func Error(line int, message string) {

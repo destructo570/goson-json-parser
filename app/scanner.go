@@ -21,6 +21,7 @@ func (s *Scanner) ScanTokens() []models.Token {
 		s.ScanToken()
 	}
 
+	s.AddToken(enum.EOF)
 	return s.Tokens
 }
 
@@ -88,6 +89,12 @@ func (s *Scanner) ScanToken() error {
 	default:
 		if s.isDigit(char) {
 			s.MatchNumber()
+		} else if char == 't' {
+			s.MatchKeyword("true", enum.TRUE)
+		} else if char == 'f' {
+			s.MatchKeyword("false", enum.FALSE)
+		} else if char == 'n' {
+			s.MatchKeyword("null", enum.NULL)
 		} else {
 			return errors.New("unexpected character")
 		}
@@ -98,6 +105,23 @@ func (s *Scanner) ScanToken() error {
 
 func (s *Scanner) isDigit(char rune) bool {
 	return char >= '0' && char <= '9'
+}
+
+func (s *Scanner) MatchKeyword(keyword string, tokenType enum.TokenType) {
+	//Start from second char since we already consume the fist one
+	for i := 1; i < len(keyword); i++ {
+
+		runes := []rune(s.Source)
+		currentRune := runes[s.current]
+
+		if currentRune == rune(keyword[i]) {
+			s.Advance()
+		} else {
+			panic("Invalid keyword")
+		}
+	}
+
+	s.AddTokenWithLiteral(tokenType, keyword)
 }
 
 func (s *Scanner) MatchNumber() {

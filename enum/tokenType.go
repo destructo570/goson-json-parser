@@ -14,4 +14,5 @@ const (
 	COMMA         TokenType = "COMMA"
 	COLON         TokenType = "COLON"
 	EOF           TokenType = "EOF"
+	NULL          TokenType = "NIL"
 )
