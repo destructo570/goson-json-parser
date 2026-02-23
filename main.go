@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"goson/app"
+	"goson/models"
 )
 
 func main() {
@@ -43,11 +45,32 @@ func Parse(source string) {
 		Line:   1,
 	}
 
+	var std any
+	if err := json.Unmarshal([]byte(source), &std); err != nil {
+		fmt.Println("std json error:", err)
+	} else {
+		fmt.Printf("std json: %#v\n", std)
+	}
+
+	parser := app.Parser{}
+
 	tokens := scanner.ScanTokens()
 
-	for _, token := range tokens {
-		println(token.ToString())
+	value, err := parser.Parse(tokens)
+
+	if err != nil {
+		fmt.Println("Error", err)
 	}
+
+	// fmt.Println("Parsed: ", value)
+
+	// // 3. Convert your AST to std-shape and compare
+	stdFromMine := models.ToStd(value)
+	fmt.Printf("my std: %#v\n", stdFromMine)
+
+	// for _, token := range tokens {
+	// 	println(token.ToString())
+	// }
 
 	// return {"hello": "hello"}
 }
